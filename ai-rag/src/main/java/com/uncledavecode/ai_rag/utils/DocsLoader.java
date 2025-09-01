@@ -1,15 +1,15 @@
 package com.uncledavecode.ai_rag.utils;
 
+import com.uncledavecode.ai_rag.service.FnaDataService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.reader.ExtractedTextFormatter;
-import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
-import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -17,13 +17,13 @@ public class DocsLoader {
 
     private final JdbcClient jdbcClient;
     private final VectorStore vectorStore;
+    private final FnaDataService fnaDataService;
 
-    @Value("classpath:docs/jls21.pdf")
-    private Resource pdfResource;
-
-    public DocsLoader(JdbcClient jdbcClient, VectorStore vectorStore) {
+    @Autowired
+    public DocsLoader(JdbcClient jdbcClient, VectorStore vectorStore, FnaDataService fnaDataService) {
         this.jdbcClient = jdbcClient;
         this.vectorStore = vectorStore;
+        this.fnaDataService = fnaDataService;
     }
 
     @PostConstruct
@@ -33,24 +33,18 @@ public class DocsLoader {
                 .single();
 
         if(count == 0){
-            log.info("Loading docs into vector store");
-            var config = PdfDocumentReaderConfig.builder()
-                    .withPageExtractedTextFormatter(new ExtractedTextFormatter.Builder()
-                            .withNumberOfBottomTextLinesToDelete(0)
-                            .withNumberOfTopTextLinesToDelete(0)
-                            .build()
-                    )
-                    .withPagesPerDocument(1)
-                    .build();
-
-            var pdfReader = new PagePdfDocumentReader(pdfResource, config);
-            var result = pdfReader.get().stream()
-                    .peek(doc -> log.info("Loading doc: {}", doc.getContent()))
-                    .toList();
-
-            vectorStore.accept(result);
-
-            log.info("Loaded {} docs into vector store", result.size());
+           log.info("Loading FNA products into vector store");
+            
+            List<Document> fnaDocuments = fnaDataService.loadFnaProductsAsDocuments();
+            
+            if (!fnaDocuments.isEmpty()) {
+                vectorStore.accept(fnaDocuments);
+               log.info("Loaded {} FNA documents into vector store", fnaDocuments.size());
+            } else {
+                log.warn("No FNA documents were loaded into vector store");
+            }
+        } else {
+            log.info("Vector store already contains {} documents, skipping load", count);
         }
     }
 }
