@@ -1,7 +1,7 @@
-package com.uncledavecode.ai_rag.service;
+package com.uncledavecode.ai_rag.fna.service;
 
-import com.uncledavecode.fna.dao.FnaProductDAO;
-import com.uncledavecode.fna.dto.FnaProductDTO;
+import com.uncledavecode.ai_rag.fna.dao.FnaProductDAO;
+import com.uncledavecode.ai_rag.fna.dto.FnaProductDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 @Slf4j
 public class FnaDataService {
-    @Autowired
     private final FnaProductDAO fnaProductDAO;
-    private static final Logger log = LoggerFactory.getLogger(FnaDataService.class);
+
     @Autowired
     public FnaDataService(FnaProductDAO fnaProductDAO) {
         this.fnaProductDAO = fnaProductDAO;
