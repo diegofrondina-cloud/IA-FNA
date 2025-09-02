@@ -15,6 +15,7 @@ import java.util.Map;
 @Service
 @Slf4j
 public class FnaDataService {
+    @Autowired
     private final FnaProductDAO fnaProductDAO;
 
     @Autowired
