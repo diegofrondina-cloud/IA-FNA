@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class FnaDataSourceConfig {
 
     @Bean(name = "oracleDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "oracle.datasource")
     public DataSource oracleDataSource() {
         return DataSourceBuilder.create().build();
     }

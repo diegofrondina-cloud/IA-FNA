@@ -1,7 +1,6 @@
 package com.uncledavecode.ai_rag.fna.dao;
 
-import com.uncledavecode.ai_rag.fna.dto.FnaProductDTO;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.uncledavecode.ai_rag.fna.dto.FnaProductDTOImpl;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -12,55 +11,55 @@ public class FnaProductDAO {
 
     private final JdbcClient jdbcClient;
 
-    public FnaProductDAO(@Qualifier("oracleJdbcTemplate") JdbcClient jdbcClient) {
+    public FnaProductDAO(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
     private static final String FNA_PRODUCT_QUERY =
             "SELECT  " +
-                    "    fpr.id AS id, " +
-                    "    fpr.fna_id AS fnaId, " +
-                    "    fpr.pof_id AS pofId, " +
-                    "    fpr.status AS status, " +
-                    "    fpr.DRA_FORM_NEEDED AS isDraFormNeeded, " +
-                    "    fpr.RETURN_REASON AS returnReason, " +
-                    "    fpr.DISB_RETURN_REASON AS disbReturnReason, " +
-                    "    fpr.LFS_RETURN_REASON AS lfsReturnReason, " +
-                    "    fpr.TRS_RETURN_REASON AS trsReturnReason, " +
-                    "    fpr.ACT_RETURN_REASON AS actReturnReason, " +
-                    "    fpr.FINOPS_RETURN_REASON AS finopsReturnReason, " +
-                    "    fpr.VAL_RETURN_REASON AS valReturnReason, " +
-                    "    TRUNC(TO_TIMESTAMP_TZ(fpr.REVIEW_SPECT_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS reviewSpectedDate, " +
-                    "    TRUNC(TO_TIMESTAMP_TZ(fpr.SUBMISSION_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS submissionDate, " +
-                    "    TRUNC(TO_TIMESTAMP_TZ(fpr.COMPLETED_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS completedDate, " +
-                    "    TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.REVIEW_SPECT_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS reviewSpectedDateString, " +
-                    "    TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.SUBMISSION_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS submissionDateString, " +
-                    "    TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.COMPLETED_DATE, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS completedDateString, " +
-                    "    fpr.FINAL_DECISION AS finalDecision, " +
-                    "    fpr.VERSION_LAST_UPDATED AS versionLastUpdate, " +
-                    "    fpr.VERSION_ACTIVE AS isActive, " +
-                    "    fpr.VERSION AS version, " +
-                    "    fpr.PROCESS_STEP AS processStep, " +
-                    "    fpr.DISB_RESPONSE_SUBMITTED_FLAG AS isDisbResponseSubmitted, " +
-                    "    fpr.LFS_RESPONSE_SUBMITTED_FLAG AS isLfsResponseSubmitted, " +
-                    "    fpr.TRS_RESPONSE_SUBMITTED_FLAG AS isTrsResponseSubmitted, " +
-                    "    fpr.ACT_RESPONSE_SUBMITTED_FLAG AS isActResponseSubmitted, " +
-                    "    fpr.VAL_RESPONSE_SUBMITTED_FLAG AS isValResponseSubmitted, " +
-                    "    fpr.FINOPS_RESPONSE_SUBMITTED_FLAG AS isFinopsResponseSubmitted ";
+                    "fpr.id AS id, " +
+                    "fpr.fna_id AS fnaId, " +
+                    "fpr.pof_id AS pofId, " +
+                    "fpr.status AS status, " +
+                    "fpr.DRA_FORM_NEEDED AS isDraFormNeeded, " +
+                    "fpr.RETURN_REASON AS returnReason, " +
+                    "fpr.DISB_RETURN_REASON AS disbReturnReason, " +
+                    "fpr.LFS_RETURN_REASON AS lfsReturnReason, " +
+                    "fpr.TRS_RETURN_REASON AS trsReturnReason, " +
+                    "fpr.ACT_RETURN_REASON AS actReturnReason, " +
+                    "fpr.FINOPS_RETURN_REASON AS finopsReturnReason, " +
+                    "fpr.VAL_RETURN_REASON AS valReturnReason, " +
+                    "TRUNC(TO_TIMESTAMP_TZ(fpr.REVIEW_SPECT_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS reviewSpectedDate, " +
+                    "TRUNC(TO_TIMESTAMP_TZ(fpr.SUBMISSION_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS submissionDate, " +
+                    "TRUNC(TO_TIMESTAMP_TZ(fpr.COMPLETED_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD') AS completedDate, " +
+                    "TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.REVIEW_SPECT_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS reviewSpectedDateString, " +
+                    "TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.SUBMISSION_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS submissionDateString, " +
+                    "TO_CHAR(TRUNC(TO_TIMESTAMP_TZ(fpr.COMPLETED_DATE,'DD-MON-YY HH.MI.SS.FF9 AM TZR'),'DD'),'DD-Mon-YYYY') AS completedDateString, " +
+                    "fpr.FINAL_DECISION AS finalDecision, " +
+                    "fpr.VERSION_LAST_UPDATED AS versionLastUpdate, " +
+                    "fpr.VERSION_ACTIVE AS isActive, " +
+                    "fpr.VERSION AS version, " +
+                    "fpr.PROCESS_STEP AS processStep, " +
+                    "fpr.DISB_RESPONSE_SUBMITTED_FLAG AS isDisbResponseSubmitted, " +
+                    "fpr.LFS_RESPONSE_SUBMITTED_FLAG AS isLfsResponseSubmitted, " +
+                    "fpr.TRS_RESPONSE_SUBMITTED_FLAG AS isTrsResponseSubmitted, " +
+                    "fpr.ACT_RESPONSE_SUBMITTED_FLAG AS isActResponseSubmitted, " +
+                    "fpr.VAL_RESPONSE_SUBMITTED_FLAG AS isValResponseSubmitted, " +
+                    "fpr.FINOPS_RESPONSE_SUBMITTED_FLAG AS isFinopsResponseSubmitted ";
 
     private static final String FNA_PRODUCT_APPEND_RESPONSES_QUERY =
-            "    , fpr.DISB_RESPONSE AS disbResponse, " +
-                    "      fpr.LFS_RESPONSE AS lfsResponse, " +
-                    "      fpr.TRS_RESPONSE AS trsResponse, " +
-                    "      fpr.FINOPS_DECISION AS finOpsResponse, " +
-                    "      fpr.VAL_RESPONSE AS valResponse, " +
-                    "      fpr.ACT_RESPONSE AS actResponse, " +
-                    "      pod.DISPLAY_NAME AS podDisplayName, " +
-                    "      pfa.MANAGING_ENTITY_CODE_PV2 AS bookingType ";
+            ", fpr.DISB_RESPONSE AS disbResponse, " +
+                    "fpr.LFS_RESPONSE AS lfsResponse, " +
+                    "fpr.TRS_RESPONSE AS trsResponse, " +
+                    "fpr.FINOPS_DECISION AS finOpsResponse, " +
+                    "fpr.VAL_RESPONSE AS valResponse, " +
+                    "fpr.ACT_RESPONSE AS actResponse, " +
+                    "pod.DISPLAY_NAME AS podDisplayName, " +
+                    "pfa.MANAGING_ENTITY_CODE_PV2 AS bookingType ";
 
     // ================== MÉTODOS ==================
 
-    public List<FnaProductDTO> findAllByFnaId(Long fnaId, Long pofId) {
+    public List<FnaProductDTOImpl> findAllByFnaId(Long fnaId, Long pofId) {
         String sql = FNA_PRODUCT_QUERY + FNA_PRODUCT_APPEND_RESPONSES_QUERY +
                 " FROM FNA_PRODUCT_FPR fpr " +
                 " JOIN PRODUCT_OFFERING_POF pof ON pof.ID = fpr.POF_ID " +
@@ -72,11 +71,11 @@ public class FnaProductDAO {
         return jdbcClient.sql(sql)
                 .param("fnaId", fnaId)
                 .param("pofId", pofId)
-                .query(FnaProductDTO.class)
+                .query(FnaProductDTOImpl.class)
                 .list();
     }
 
-    public List<FnaProductDTO> findAllByFnaIdRestrictedView(Long fnaId, Long pofId) {
+    public List<FnaProductDTOImpl> findAllByFnaIdRestrictedView(Long fnaId, Long pofId) {
         String sql = FNA_PRODUCT_QUERY +
                 " FROM FNA_PRODUCT_FPR fpr " +
                 " WHERE fpr.fna_id = :fnaId AND fpr.pof_id = :pofId " +
@@ -85,11 +84,11 @@ public class FnaProductDAO {
         return jdbcClient.sql(sql)
                 .param("fnaId", fnaId)
                 .param("pofId", pofId)
-                .query(FnaProductDTO.class)
+                .query(FnaProductDTOImpl.class)
                 .list();
     }
 
-    public FnaProductDTO findByProductId(Long fnaProductId) {
+    public FnaProductDTOImpl findByProductId(Long fnaProductId) {
         String sql = FNA_PRODUCT_QUERY + FNA_PRODUCT_APPEND_RESPONSES_QUERY +
                 " FROM FNA_PRODUCT_FPR fpr " +
                 " JOIN PRODUCT_OFFERING_POF pof ON pof.ID = fpr.POF_ID " +
@@ -99,7 +98,7 @@ public class FnaProductDAO {
 
         return jdbcClient.sql(sql)
                 .param("fnaProductId", fnaProductId)
-                .query(FnaProductDTO.class)
+                .query(FnaProductDTOImpl.class)
                 .single();
     }
 }
