@@ -1,5 +1,6 @@
 package com.uncledavecode.ai_rag.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ public class FnaDataSourceConfig {
     }
 
     @Bean(name = "oracleJdbcTemplate")
-    public JdbcTemplate oracleJdbcTemplate(DataSource oracleDataSource) {
+    public JdbcTemplate oracleJdbcTemplate(@Qualifier("oracleDataSource") DataSource oracleDataSource) {
         return new JdbcTemplate(oracleDataSource);
     }
 }
