@@ -11,7 +11,7 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.uncledavecode</groupId>
+	<groupId>com.drondina</groupId>
 	<artifactId>ai-rag</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ai-rag</name>
