@@ -2,6 +2,7 @@ package com.uncledavecode.ai_rag.fna.service;
 
 import com.uncledavecode.ai_rag.fna.dao.FnaProductDAO;
 import com.uncledavecode.ai_rag.fna.dto.FnaProductDTO;
+import com.uncledavecode.ai_rag.fna.dto.FnaProductDTOImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Service
 @Slf4j
 public class FnaDataService {
-    @Autowired
+
     private final FnaProductDAO fnaProductDAO;
 
     @Autowired
@@ -27,10 +28,9 @@ public class FnaDataService {
         List<Document> documents = new ArrayList<>();
         
         try {
-            // ID hardcodeado para testing - cambiar después
             Long testProductId = 1L;
             
-            FnaProductDTO product = fnaProductDAO.findByProductId(testProductId);
+            FnaProductDTOImpl product = fnaProductDAO.findByProductId(testProductId);
             if (product != null) {
                 documents.addAll(createGranularProductDocuments(product));
                 log.info("Producto FNA cargado exitosamente: ID={}, Nombre={}",
@@ -46,7 +46,7 @@ public class FnaDataService {
         return documents;
     }
     
-    private List<Document> createGranularProductDocuments(FnaProductDTO product) {
+    private List<Document> createGranularProductDocuments(FnaProductDTOImpl product) {
         List<Document> documents = new ArrayList<>();
         
         // Documento principal del producto
@@ -63,7 +63,7 @@ public class FnaDataService {
         return documents;
     }
     
-    private Document createMainProductDocument(FnaProductDTO product) {
+    private Document createMainProductDocument(FnaProductDTOImpl product) {
         String content = String.format(
             "Producto FNA con ID %d: Este es un producto financiero con nombre '%s', " +
             "tipo de booking '%s', estado '%s', y paso del proceso '%s'. " +
@@ -89,7 +89,7 @@ public class FnaDataService {
         return new Document(content, metadata);
     }
     
-    private Document createFieldDocument(FnaProductDTO product, String fieldName, String fieldValue, String description) {
+    private Document createFieldDocument(FnaProductDTOImpl product, String fieldName, String fieldValue, String description) {
         String content = String.format(
             "El %s del producto FNA '%s' (ID: %d) es: %s",
             description,
