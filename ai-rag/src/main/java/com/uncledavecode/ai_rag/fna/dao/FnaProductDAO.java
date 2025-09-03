@@ -1,9 +1,11 @@
 package com.uncledavecode.ai_rag.fna.dao;
 
 import com.uncledavecode.ai_rag.fna.dto.FnaProductDTOImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
@@ -11,8 +13,8 @@ public class FnaProductDAO {
 
     private final JdbcClient jdbcClient;
 
-    public FnaProductDAO(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
+    public FnaProductDAO(@Qualifier("oracleDataSource") DataSource oracleDataSource) {
+        this.jdbcClient = JdbcClient.create(oracleDataSource);
     }
 
     private static final String FNA_PRODUCT_QUERY =
