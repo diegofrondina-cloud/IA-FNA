@@ -1,4 +1,4 @@
-package com.uncledavecode.ai_rag.config;
+package com.drondina.ai_rag.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;

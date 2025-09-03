@@ -1,4 +1,4 @@
-package com.uncledavecode.ai_rag.fna.dto;
+package com.drondina.ai_rag.fna.dto;
 
 import java.time.LocalDateTime;
 

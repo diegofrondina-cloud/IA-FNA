@@ -1,6 +1,6 @@
-package com.uncledavecode.ai_rag.fna.dao;
+package com.drondina.ai_rag.fna.dao;
 
-import com.uncledavecode.ai_rag.fna.dto.FnaProductDTOImpl;
+import com.drondina.ai_rag.fna.dto.FnaProductDTOImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;

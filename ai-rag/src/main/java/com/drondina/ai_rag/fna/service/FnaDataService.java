@@ -1,8 +1,7 @@
-package com.uncledavecode.ai_rag.fna.service;
+package com.drondina.ai_rag.fna.service;
 
-import com.uncledavecode.ai_rag.fna.dao.FnaProductDAO;
-import com.uncledavecode.ai_rag.fna.dto.FnaProductDTO;
-import com.uncledavecode.ai_rag.fna.dto.FnaProductDTOImpl;
+import com.drondina.ai_rag.fna.dao.FnaProductDAO;
+import com.drondina.ai_rag.fna.dto.FnaProductDTOImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
