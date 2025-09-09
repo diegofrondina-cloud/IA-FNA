@@ -59,7 +59,7 @@ public class FnaProductDAO {
                     "pod.DISPLAY_NAME AS podDisplayName, " +
                     "pfa.MANAGING_ENTITY_CODE_PV2 AS bookingType ";
 
-    // ================== MÉTODOS ==================
+
 
     public List<FnaProductDTOImpl> findAllByFnaId(Long fnaId, Long pofId) {
         String sql = FNA_PRODUCT_QUERY + FNA_PRODUCT_APPEND_RESPONSES_QUERY +

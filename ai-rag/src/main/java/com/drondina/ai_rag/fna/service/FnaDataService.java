@@ -27,7 +27,7 @@ public class FnaDataService {
         List<Document> documents = new ArrayList<>();
         
         try {
-            Long testProductId = 1L;
+            Long testProductId = 497L;
             
             FnaProductDTOImpl product = fnaProductDAO.findByProductId(testProductId);
             if (product != null) {
