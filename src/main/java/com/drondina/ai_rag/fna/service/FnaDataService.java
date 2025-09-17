@@ -1,0 +1,110 @@
+package com.drondina.ai_rag.fna.service;
+
+import com.drondina.ai_rag.fna.dao.FnaProductDAO;
+import com.drondina.ai_rag.fna.dto.FnaProductDTOImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@Slf4j
+public class FnaDataService {
+
+    private final FnaProductDAO fnaProductDAO;
+
+    @Autowired
+    public FnaDataService(FnaProductDAO fnaProductDAO) {
+        this.fnaProductDAO = fnaProductDAO;
+    }
+    
+    public List<Document> loadFnaProductsAsDocuments() {
+        List<Document> documents = new ArrayList<>();
+        
+        try {
+            Long testProductId = 497L;
+            
+            FnaProductDTOImpl product = fnaProductDAO.findByProductId(testProductId);
+            if (product != null) {
+                documents.addAll(createGranularProductDocuments(product));
+                log.info("Producto FNA cargado exitosamente: ID={}, Nombre={}",
+                  product.getId(), product.getPodDisplayName());
+            } else {
+                log.warn("No se encontró producto con ID: {}", testProductId);
+            }
+            
+        } catch (Exception e) {
+           log.error("Error cargando productos de FNA: ", e);
+        }
+        
+        return documents;
+    }
+    
+    private List<Document> createGranularProductDocuments(FnaProductDTOImpl product) {
+        List<Document> documents = new ArrayList<>();
+        
+        // Documento principal del producto
+        documents.add(createMainProductDocument(product));
+        
+        // Documentos granulares por campos específicos
+        documents.add(createFieldDocument(product, "status", product.getStatus(), "Estado del producto FNA"));
+        documents.add(createFieldDocument(product, "podDisplayName", product.getPodDisplayName(), "Nombre del producto"));
+        documents.add(createFieldDocument(product, "bookingType", product.getBookingType(), "Tipo de booking"));
+        documents.add(createFieldDocument(product, "processStep", product.getProcessStep(), "Paso del proceso"));
+        documents.add(createFieldDocument(product, "finalDecision", product.getFinalDecision(), "Decisión final"));
+        documents.add(createFieldDocument(product, "isActive", product.getIsActive().toString(), "Estado activo"));
+        
+        return documents;
+    }
+    
+    private Document createMainProductDocument(FnaProductDTOImpl product) {
+        String content = String.format(
+            "Producto FNA con ID %d: Este es un producto financiero con nombre '%s', " +
+            "tipo de booking '%s', estado '%s', y paso del proceso '%s'. " +
+            "La decisión final es '%s' y está %s.",
+            product.getId(),
+            product.getPodDisplayName(),
+            product.getBookingType(),
+            product.getStatus(),
+            product.getProcessStep(),
+            product.getFinalDecision(),
+            product.getIsActive() ? "activo" : "inactivo"
+        );
+        
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("id", product.getId().toString());
+        metadata.put("fnaId", product.getFnaId().toString());
+        metadata.put("pofId", product.getPofId().toString());
+        metadata.put("type", "fna_product_main");
+        metadata.put("podDisplayName", product.getPodDisplayName());
+        metadata.put("bookingType", product.getBookingType());
+        metadata.put("status", product.getStatus());
+        
+        return new Document(content, metadata);
+    }
+    
+    private Document createFieldDocument(FnaProductDTOImpl product, String fieldName, String fieldValue, String description) {
+        String content = String.format(
+            "El %s del producto FNA '%s' (ID: %d) es: %s",
+            description,
+            product.getPodDisplayName(),
+            product.getId(),
+            fieldValue
+        );
+        
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("id", product.getId().toString());
+        metadata.put("fnaId", product.getFnaId().toString());
+        metadata.put("fieldName", fieldName);
+        metadata.put("fieldValue", fieldValue);
+        metadata.put("podDisplayName", product.getPodDisplayName());
+        metadata.put("type", "fna_product_field");
+        
+        return new Document(content, metadata);
+    }
+}
